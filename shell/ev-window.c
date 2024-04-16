@@ -3147,7 +3147,7 @@ file_save_dialog_response_cb (GtkWidget *fc,
 
 	ev_window_clear_save_job (ev_window);
 	priv->save_job = ev_job_save_new (priv->document,
-						     uri, priv->uri);
+						     priv->uri, priv->uri);
 	g_signal_connect (priv->save_job, "finished",
 			  G_CALLBACK (ev_window_save_job_cb),
 			  ev_window);
