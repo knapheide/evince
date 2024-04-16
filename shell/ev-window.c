@@ -3147,7 +3147,7 @@ file_save_dialog_response_cb (GtkWidget *fc,
 
 	ev_window_clear_save_job (ev_window);
 	priv->save_job = ev_job_save_new (priv->document,
-						     priv->uri, priv->uri);
+						     uri, priv->uri);
 	g_signal_connect (priv->save_job, "finished",
 			  G_CALLBACK (ev_window_save_job_cb),
 			  ev_window);
@@ -5261,6 +5261,19 @@ ev_window_document_modified_cb (EvDocument *document,
 	HdyHeaderBar *toolbar = ev_window_get_toolbar (ev_window);
 	const gchar *title = hdy_header_bar_get_title (toolbar);
 	gchar *new_title;
+
+	g_debug ("Modified -> Saving");
+
+	{
+		ev_window_clear_save_job (ev_window);
+		priv->save_job = ev_job_save_new (priv->document,
+						  priv->uri, priv->uri);
+		g_signal_connect (priv->save_job, "finished",
+				  G_CALLBACK (ev_window_save_job_cb),
+				  ev_window);
+		/* The priority doesn't matter for this job */
+		ev_job_scheduler_push_job (priv->save_job, EV_JOB_PRIORITY_NONE);
+	}
 
 	if (priv->is_modified)
 		return;

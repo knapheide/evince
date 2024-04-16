@@ -10,8 +10,8 @@ pkgs.callPackage ({ lib, stdenv, fetchurl, meson, ninja, pkg-config, gettext
   , withLibsecret ? true }:
 
   stdenv.mkDerivation rec {
-    pname = "evince";
-    version = "45.0";
+    pname = "evince-autosave";
+    version = "46.0";
 
     outputs = [ "out" "dev" "devdoc" ];
 
@@ -85,6 +85,13 @@ pkgs.callPackage ({ lib, stdenv, fetchurl, meson, ninja, pkg-config, gettext
       moveToOutput "share/doc" "$devdoc"
     '';
 
+    postInstall = ''
+      rm $out/bin/evince-previewer
+      rm $out/bin/evince-thumbnailer
+      # rm -rf $out/share
+      mv $out/bin/evince $out/bin/evince-autosave
+    '';
+
     passthru = { updateScript = gnome.updateScript { packageName = pname; }; };
 
     meta = with lib; {
@@ -100,7 +107,7 @@ pkgs.callPackage ({ lib, stdenv, fetchurl, meson, ninja, pkg-config, gettext
 
       license = licenses.gpl2Plus;
       platforms = platforms.unix;
-      mainProgram = "evince";
+      mainProgram = "evince-autosave";
       maintainers = teams.gnome.members ++ teams.pantheon.members;
     };
   }) { }

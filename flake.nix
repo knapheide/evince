@@ -7,8 +7,8 @@
   outputs = { self, nixpkgs, flake-utils }:
     flake-utils.lib.eachDefaultSystem (system: {
       packages = rec {
-        evince = (import ./default.nix) { pkgs = nixpkgs.legacyPackages.${system}; };
-        default = evince;
+        evince-autosave = (import ./default.nix) { pkgs = nixpkgs.legacyPackages.${system}; };
+        default = evince-autosave;
       };
     });
 }
